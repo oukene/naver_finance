@@ -1,0 +1,51 @@
+{
+    "title": "Naver Finance",
+    "config": {
+        "abort": {
+            "single_instance_allowed": "Component installation cannot be duplicated. Use the installed components"
+        },
+        "step": {
+            "confirm": {
+                "description": "Do you want to set up?"
+            },
+            "user": {
+                "data": {},
+                "description": "Click ok to complete installation"
+            }
+        }
+    },
+    "options": {
+        "step": {
+            "init": {
+                "title": "Naver Finance Options",
+                "data": {
+                    "option_select": "What to do?"
+                }
+            },
+            "select": {
+                "title": "Select an entity",
+                "data": {
+                    "option_entities": "Select the entity you want to edit",
+                    "option_delete": "Delete selected entity"
+                }
+            },
+            "entity": {
+                "title": "add search keyword",
+                "data": {
+                    "word": "search keyword",
+                    "unit": "input unit",
+                    "refresh_period": "refresh period(minute)",
+                    "add_another": "add more search keyword"
+                }
+            }
+        }
+    },
+    "selector": {
+        "option_select": {
+            "options": {
+                "option_modify": "Modify an entity",
+                "option_add": "Add an entity"
+            }
+        }
+    }
+}

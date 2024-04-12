@@ -1,0 +1,49 @@
+{
+    "title": "\ub124\uc774\ubc84 \uc99d\uad8c",
+    "config": {
+        "abort": {
+            "single_instance_allowed": "\ud55c\uac1c\uc758 \uc778\uc2a4\ud134\uc2a4\ub9cc \uc124\uce58\ud560 \uc218 \uc788\uc2b5\ub2c8\ub2e4."
+        },
+        "step": {
+            "confirm": {},
+            "user": {
+                "data": {},
+                "description": "\ud655\uc778\uc744 \ub204\ub974\uba74 \uc124\uce58\ub97c \uc644\ub8cc\ud569\ub2c8\ub2e4."
+            }
+        }
+    },
+    "options": {
+        "step": {
+            "init": {
+                "title": "\ub2e4\ub098\uc640 \uc1fc\ud551 \uc635\uc158",
+                "data": {
+                    "option_select": "\ubb34\uc5c7\uc744 \ud560\uae4c\uc694?"
+                }
+            },
+            "select": {
+                "title": "\uc5d4\ud2f0\ud2f0 \uc120\ud0dd",
+                "data": {
+                    "option_entities": "\uc218\uc815\ud560 \uc5d4\ud2f0\ud2f0\ub97c \uc120\ud0dd\ud558\uc138\uc694",
+                    "option_delete": "\uc120\ud0dd\ud55c \uc5d4\ud2f0\ud2f0\ub97c \uc0ad\uc81c\ud569\ub2c8\ub2e4"
+                }
+            },
+            "entity": {
+                "title": "\uac80\uc0c9\uc5b4\ub97c \uc785\ub825\ud558\uc138\uc694",
+                "data": {
+                    "word": "\uac80\uc0c9\uc5b4",
+                    "unit": "\ub2e8\uc704\ub97c \uc785\ub825\ud558\uc138\uc694",
+                    "refresh_period": "\uac31\uc2e0\uc8fc\uae30(\ubd84)",
+                    "add_another": "\uac80\uc0c9\uc5b4\ub97c \ub354 \ucd94\uac00\ud569\ub2c8\ub2e4"
+                }
+            }
+        }
+    },
+    "selector": {
+        "option_select": {
+            "options": {
+                "option_modify": "\uad6c\uc131\uc694\uc18c\ub97c \uc218\uc815\ud569\ub2c8\ub2e4",
+                "option_add": "\uad6c\uc131\uc694\uc18c\ub97c \ucd94\uac00\ud569\ub2c8\ub2e4"
+            }
+        }
+    }
+}

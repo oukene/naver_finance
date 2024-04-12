@@ -1,0 +1,16 @@
+{
+  "domain": "naver_finance",
+  "name": "Naver Finance",
+  "config_flow": true,
+  "documentation": "https://github.com/oukene/naver_finance",
+  "requirements": [],
+  "ssdp": [],
+  "zeroconf": [],
+  "homekit": {},
+  "dependencies": [],
+  "codeowners": [
+    "@oukene"
+  ],
+  "iot_class": "cloud_polling",
+  "version": "1.0.0"
+}
