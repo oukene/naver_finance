@@ -15,6 +15,9 @@
         }
     },
     "options": {
+        "abort": {
+            "already_input_keyword": "already exist keyword"
+        },
         "step": {
             "init": {
                 "title": "Naver Finance Options",

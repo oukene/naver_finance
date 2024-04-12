@@ -35,7 +35,8 @@ async def async_setup_entry(hass, config_entry, async_add_devices):
 
     hass.data[DOMAIN]["listener"] = []
 
-    device = Device(NAME)
+    _LOGGER.debug("config entry : " + str(config_entry.entry_id))
+    device = Device(NAME, config_entry.entry_id)
 
     new_devices = []
 
@@ -56,9 +57,9 @@ async def async_setup_entry(hass, config_entry, async_add_devices):
 
 
 class Device:
-    def __init__(self, name):
+    def __init__(self, name, entry_id):
         """Init dummy roller."""
-        self._id = name
+        self._id = entry_id
         self.name = name
         self._callbacks = set()
         self._loop = asyncio.get_event_loop()
@@ -119,7 +120,7 @@ class SensorBase(SensorEntity):
         return {
             "identifiers": {(DOMAIN, self._device.device_id)},
             # If desired, the name for the device could be different to the entity
-            "name": self._device.device_id,
+            "name": self._device.name,
             "sw_version": self._device.firmware_version,
             "model": self._device.model,
             "manufacturer": self._device.manufacturer
@@ -167,7 +168,7 @@ class DanawaShoppingSensor(SensorBase):
         # self._device_class = SENSOR_TYPES[sensor_type][0]
         self._device = device
         
-        self._url = CONF_URL + str(self._word) + "주가"
+        self._url = CONF_URL + str(self._word) + "시세"
         self._attr_extra_state_attributes["URL"] = self._url
 
         self._loop = asyncio.get_event_loop()

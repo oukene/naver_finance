@@ -1,5 +1,5 @@
 {
-    "title": "\ub124\uc774\ubc84 \uc99d\uad8c",
+    "title": "\ub124\uc774\ubc84 \uae08\uc735",
     "config": {
         "abort": {
             "single_instance_allowed": "\ud55c\uac1c\uc758 \uc778\uc2a4\ud134\uc2a4\ub9cc \uc124\uce58\ud560 \uc218 \uc788\uc2b5\ub2c8\ub2e4."
@@ -13,9 +13,12 @@
         }
     },
     "options": {
+        "abort": {
+            "already_input_keyword": "\uc774\ubbf8 \ucd94\uac00\ub418\uc5b4\uc788\ub294 \ud56d\ubaa9\uc785\ub2c8\ub2e4"
+        },
         "step": {
             "init": {
-                "title": "\ub2e4\ub098\uc640 \uc1fc\ud551 \uc635\uc158",
+                "title": "\ub124\uc774\ubc84 \uae08\uc735 \uc635\uc158",
                 "data": {
                     "option_select": "\ubb34\uc5c7\uc744 \ud560\uae4c\uc694?"
                 }

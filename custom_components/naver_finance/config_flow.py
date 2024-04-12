@@ -32,17 +32,17 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     """Handle a config flow for Hello World."""
 
     VERSION = 1
-    CONNECTION_CLASS = config_entries.CONN_CLASS_LOCAL_POLL
+    CONNECTION_CLASS = config_entries.CONN_CLASS_CLOUD_POLL
     data: Optional[Dict[str, Any]]
 
     async def async_step_user(self, user_input: Optional[Dict[str, Any]] = None):
         """Handle the initial step."""
         errors = {}
         
-        if self._async_current_entries():
-            return self.async_abort(reason="single_instance_allowed")
-        if self.hass.data.get(DOMAIN):
-            return self.async_abort(reason="single_instance_allowed")
+        #if self._async_current_entries():
+            #return self.async_abort(reason="single_instance_allowed")
+        #if self.hass.data.get(DOMAIN):
+        #    return self.async_abort(reason="single_instance_allowed")
 
         if user_input is not None:
             self.data = user_input
@@ -103,6 +103,7 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
     ) -> Dict[str, Any]:
         """Manage the options for the custom component."""
         errors: Dict[str, str] = {}
+
         if user_input is not None:
             _LOGGER.debug("user input is not None")
             if not errors:
@@ -177,9 +178,14 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
         errors: Dict[str, str] = {}
         if user_input is not None:
             if not errors:
-                if self._selected_option:
+                _LOGGER.debug("selected_option : " + str(self._selected_option))
+                if len(self._selected_option) <= 0:
                     for k in self.data[CONF_KEYWORDS]:
-                        if self._selected_option.get(CONF_WORD):
+                        if k.get(CONF_WORD) == user_input.get(CONF_WORD):
+                            return self.async_abort(reason="already_input_keyword")
+                elif self._selected_option:
+                    for k in self.data[CONF_KEYWORDS]:
+                        if self._selected_option.get(CONF_WORD) == k.get(CONF_WORD):
                             self.data[CONF_KEYWORDS].remove(k)
                             break
 
@@ -213,7 +219,11 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
                     {
                         vol.Required(CONF_WORD, default=self._selected_option.get(CONF_WORD, None)): cv.string,
                         #vol.Optional(CONF_UNIT, default=self._selected_option.get(CONF_UNIT, "krw")): cv.string,
-                        vol.Optional(CONF_UNIT, description={"suggested_value": self._selected_option.get(CONF_UNIT, "krw")}): cv.string,
+                        #vol.Optional(CONF_UNIT, description={"suggested_value": self._selected_option.get(CONF_UNIT, "krw")}): cv.string,
+
+                        vol.Optional(CONF_UNIT, description={"suggested_value": self._selected_option.get(CONF_UNIT, None)}): selector.SelectSelector(selector.SelectSelectorConfig(options=CURRENCY_TYPES, custom_value=True, multiple=False,
+                                                                                                                                               mode=selector.SelectSelectorMode.DROPDOWN)),
+
                         vol.Optional(CONF_IMAGE, description={"suggested_value": self._selected_option.get(CONF_IMAGE, None)}): cv.string,
                         #vol.Optional(CONF_IMAGE, default=self._selected_option.get(CONF_IMAGE, "")): cv.string,
                         vol.Required(CONF_REFRESH_PERIOD, default=self._selected_option.get(CONF_REFRESH_PERIOD, REFRESH_MIN)): int,

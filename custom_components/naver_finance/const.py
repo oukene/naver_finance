@@ -18,6 +18,13 @@ CONF_OPTIONS = [
     CONF_OPTION_ADD
 ]
 
+CURRENCY_TYPES = [
+    "원",
+    "KRW",
+    "달러",
+    "USD",
+]
+
 CONF_KEYWORDS = "keywords"
 CONF_WORD = "word"
 CONF_REFRESH_PERIOD = "refresh_period"
