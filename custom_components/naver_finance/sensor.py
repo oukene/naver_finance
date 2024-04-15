@@ -194,11 +194,15 @@ class NaverFinanceSensor(SensorBase):
         try:
             custom_ssl_context = ssl.create_default_context(ssl.Purpose.SERVER_AUTH)
             custom_ssl_context.options |= 0x00040000
+            headers = {
+                'user-agent': DOMAIN
+            }
 
             connector = aiohttp.TCPConnector(ssl=custom_ssl_context)
-            async with aiohttp.ClientSession(connector=connector) as session:
+            async with aiohttp.ClientSession(connector=connector, headers=headers) as session:
                 async with session.get(self._url) as response:
                     raw_data = await response.read()
+
                     soup = bs(raw_data, 'html.parser')
                     price = soup.select_one(".spt_con strong").text
                     text = soup.select_one(".spt_con").select_one(".n_ch").select_one(".blind").text
