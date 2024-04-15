@@ -203,9 +203,11 @@ class NaverFinanceSensor(SensorBase):
                     price = soup.select_one(".spt_con strong").text
                     text = soup.select_one(".spt_con").select_one(".n_ch").select_one(".blind").text
                     updown = soup.select_one(".spt_con").select_one(".n_ch").select_one(".ico").text
-                    beforeday = text + " " + soup.select_one(".spt_con").select_one(".n_ch").select("em")[0].text + (self._attr_unit_of_measurement if self._attr_unit_of_measurement is not None else "") + updown + soup.select_one(".spt_con").select_one(".n_ch").select("em")[1].text
+                    rate = soup.select_one(".spt_con").select_one(".n_ch").select("em")[1].text
+                    beforeday = text + " " + soup.select_one(".spt_con").select_one(".n_ch").select("em")[0].text + (self._attr_unit_of_measurement if self._attr_unit_of_measurement is not None else "") + updown
                     self._attr_native_value = price.replace(",", "")
                     self._attr_extra_state_attributes["before_day"] = beforeday
+                    self._attr_extra_state_attributes["before_day rate"] = rate.replace("(", "").replace(")", "")
 
             self._attr_extra_state_attributes["last_refresh_time"] = datetime.now().strftime("%Y-%m-%d %H:%M")
             self._attr_extra_state_attributes["refresh_period"] = self._refresh_period
