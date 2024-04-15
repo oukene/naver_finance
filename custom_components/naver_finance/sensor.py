@@ -34,16 +34,16 @@ async def async_setup_entry(hass, config_entry, async_add_devices):
     """Add sensors for passed config_entry in HA."""
 
     hass.data[DOMAIN]["listener"] = []
-
-    _LOGGER.debug("config entry : " + str(config_entry.entry_id))
-    device = Device(NAME, config_entry.entry_id)
+    
+    device = hass.data[DOMAIN]["device"]
 
     new_devices = []
 
     for entity in config_entry.options.get(CONF_KEYWORDS, {}):
         new_devices.append(
-            DanawaShoppingSensor(
+            NaverFinanceSensor(
                 hass,
+                config_entry,
                 device,
                 entity.get(CONF_WORD),
                 entity.get(CONF_UNIT),
@@ -70,6 +70,7 @@ class Device:
         self.firmware_version = VERSION
         self.model = NAME
         self.manufacturer = NAME
+        self._entities = {}
 
     @property
     def device_id(self):
@@ -95,6 +96,14 @@ class Device:
         """Schedule call all registered callbacks."""
         for callback in self._callbacks:
             callback()
+
+    def add_entity(self, word, entity):
+        self._entities[word] = entity
+
+    async def refresh(self):
+        for k, v in self._entities.items():
+            await v.get_price()
+
 
 # This base class shows the common properties and methods for a sensor as used in this
 # example. See each sensor for further details about properties and methods that
@@ -144,11 +153,11 @@ class SensorBase(SensorEntity):
         self._device.remove_callback(self.async_write_ha_state)
 
 
-class DanawaShoppingSensor(SensorBase):
+class NaverFinanceSensor(SensorBase):
     """Representation of a Thermal Comfort Sensor."""
     _attr_has_entity_name = True
     
-    def __init__(self, hass, device, word, unit, image, refresh_period):
+    def __init__(self, hass, config, device, word, unit, image, refresh_period):
         """Initialize the sensor."""
         super().__init__(device)
 
@@ -156,9 +165,9 @@ class DanawaShoppingSensor(SensorBase):
         self._word = word
 
         self.entity_id = async_generate_entity_id(
-            ENTITY_ID_FORMAT, "{}_{}".format(NAME, word), hass=hass)
+            ENTITY_ID_FORMAT, "{}_{}_{}".format(NAME, config.entry_id, word), hass=hass)
         self._attr_unique_id = async_generate_entity_id(
-            ENTITY_ID_FORMAT, "{}_{}".format(NAME, word), hass=hass)
+            ENTITY_ID_FORMAT, "{}_{}_{}".format(NAME, config.entry_id, word), hass=hass)
         self._attr_name = "{}".format(word)
         self._attr_unit_of_measurement = "KRW"
         self._attr_extra_state_attributes = {}
@@ -170,6 +179,8 @@ class DanawaShoppingSensor(SensorBase):
         
         self._url = CONF_URL + str(self._word) + "시세"
         self._attr_extra_state_attributes["URL"] = self._url
+
+        self._device.add_entity(word, self)
 
         self._loop = asyncio.get_event_loop()
         Timer(1, self.refreshTimer).start()

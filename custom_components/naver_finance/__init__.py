@@ -9,13 +9,14 @@ from homeassistant.helpers import (
     entity_registry as er,
 )
 
-from .const import DOMAIN
+from .const import DOMAIN, NAME
+from .sensor import Device
 
 _LOGGER = logging.getLogger(__name__)
 
 # List of platforms to support. There should be a matching .py file for each,
 # eg <cover.py> and <sensor.py>
-PLATFORMS = ["sensor"]
+PLATFORMS = ["sensor", "button"]
 
 
 async def async_setup(hass: HomeAssistant, config: dict):
@@ -35,6 +36,9 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     # with your actual devices.
     _LOGGER.debug("call async_setup_entry")
     hass.data[DOMAIN][entry.entry_id] = DOMAIN
+
+    device = Device(NAME, entry.entry_id)
+    hass.data[DOMAIN]["device"] = device
 
     entry.async_on_unload(entry.add_update_listener(update_listener))
 
