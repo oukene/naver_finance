@@ -37,6 +37,7 @@
                 "data": {
                     "word": "search keyword",
                     "unit": "input unit",
+                    "image": "input icon url",
                     "refresh_period": "refresh period(minute)",
                     "add_another": "add more search keyword"
                 }
