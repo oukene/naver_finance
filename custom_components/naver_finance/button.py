@@ -102,6 +102,7 @@ class NaverFinanceButton(ButtonBase):
         self._device = device
 
     def press(self):
+        #self._device.refresh()
         self._device._loop.create_task(self._device.refresh())
 
     def update(self):

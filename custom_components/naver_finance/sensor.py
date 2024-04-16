@@ -13,6 +13,7 @@ import aiohttp
 import json
 import asyncio
 
+from homeassistant.const import STATE_UNKNOWN
 from .const import *
 from homeassistant.helpers.entity import async_generate_entity_id
 from homeassistant.components.sensor import SensorEntity
@@ -181,14 +182,15 @@ class NaverFinanceSensor(SensorBase):
         self._attr_extra_state_attributes["URL"] = self._url
 
         self._device.add_entity(word, self)
+        self._refresh_count = 0
 
         self._loop = asyncio.get_event_loop()
-        Timer(1, self.refreshTimer).start()
+        self._refresh_timer = Timer(1, self.refreshTimer)
+        self._refresh_timer.start()
     
     def refreshTimer(self):
         self._loop.create_task(self.get_price())
         Timer(self._refresh_period*60, self.refreshTimer).start()
-
 
     async def get_price(self):
         try:
@@ -216,11 +218,19 @@ class NaverFinanceSensor(SensorBase):
             self._attr_extra_state_attributes["last_refresh_time"] = datetime.now().strftime("%Y-%m-%d %H:%M")
             self._attr_extra_state_attributes["refresh_period"] = self._refresh_period
             self._device.publish_updates()
+            self._refresh_count = 0
         except Exception as e:
-            _LOGGER.error("get price error : " + traceback.format_exc())
-
-        finally:
-            """"""
+            # 5초후 재시도
+            if self._refresh_count < 10:
+                self._refresh_count = self._refresh_count + 1
+                await asyncio.sleep(5)
+                self._loop.create_task(self.get_price())
+                #Timer(5, self.get_price).start()
+                _LOGGER.debug("get price error retry : " + traceback.format_exc())
+            else:
+                self._refresh_count = 0
+                self._attr_native_value = STATE_UNKNOWN
+                _LOGGER.error("get price error : " + traceback.format_exc())
             
     """Sensor Properties"""
     @property
